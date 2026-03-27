@@ -151,4 +151,4 @@ seopc-project/
 
 ## License
 
-MIT
+GNU Affero General Public License
