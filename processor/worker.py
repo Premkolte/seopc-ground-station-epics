@@ -7,7 +7,7 @@ from kafka import KafkaConsumer
 from minio import Minio
 import psycopg2
 from io import BytesIO
-
+from prometheus_client import start_http_server, Counter, Gauge, Histogram
 import torch
 import timm
 from torchvision import transforms
@@ -30,9 +30,19 @@ PG_CONN_STR = os.getenv(
     "PG_CONN_STR",
     "dbname=seopc_metadata user=admin password=password123 host=localhost port=5432"
 )
+# Track total images processed
+IMAGES_PROCESSED = Counter('argus_processor_images_total', 'Total satellite images processed')
 
+# Track current processing latency
+LATENCY = Gauge('argus_processor_latency_ms', 'Current processing latency in milliseconds')
+
+# Track memory usage of the ViT model specifically
+VIT_MEM = Gauge('argus_processor_vit_mem_bytes', 'Memory used by ViT model')
 # ================= MAIN =================
 def main():
+    # START PROMETHEUS SERVER HERE
+    start_http_server(8000, addr='0.0.0.0')
+    print("Prometheus metrics server started on port 8000")
     print("Starting Argus Processing Worker (Geo-Localization)...")
 
     # ===== LOAD MODEL =====
@@ -212,6 +222,9 @@ def main():
 
             # ===== LOG TO DB =====
             latency = int((time.time() - start_time) * 1000)
+
+            IMAGES_PROCESSED.inc()
+            LATENCY.set(latency)
 
             cur.execute(
                 "INSERT INTO processing_logs (filename, latency_ms, result) VALUES (%s, %s, %s)",

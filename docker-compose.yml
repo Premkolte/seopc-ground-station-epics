@@ -61,6 +61,8 @@ services:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password123
       PG_CONN_STR: dbname=seopc_metadata user=admin password=password123 host=postgis port=5432
+    ports:
+      - "8000:8000"
     volumes:
       - ./local_sync:/local_sync
     deploy:
@@ -78,6 +80,8 @@ services:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password123
       WATCH_DIR: /downlink_buffer
+    ports:
+      - "8080:8080"
     volumes:
       - ./downlink_buffer:/downlink_buffer
     mem_limit: 128m

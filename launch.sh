@@ -15,9 +15,9 @@ if [[ "$1" == "--rebuild" ]]; then
 fi
 
 # ── PHASE 1: Infrastructure ─────────────────────────────────────────────────
-echo "[ARGUS] Starting infrastructure (redpanda, minio, postgis)..."
+echo "[ARGUS] Starting infrastructure (redpanda, minio, postgis, prometheus, grafana)..."
 sudo docker compose -f "$PROJECT_DIR/docker-compose.yml" up -d $REBUILD \
-    redpanda minio postgis
+    redpanda minio postgis prometheus grafana
 
 echo "[ARGUS] Waiting for PostGIS to be ready..."
 until sudo docker exec postgis pg_isready -U admin -d seopc_metadata -q 2>/dev/null; do

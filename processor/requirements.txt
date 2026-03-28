@@ -5,3 +5,4 @@ psycopg2-binary
 timm
 pandas
 scikit-learn
+prometheus-client

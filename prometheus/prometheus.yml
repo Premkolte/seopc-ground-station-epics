@@ -1,0 +1,7 @@
+- job_name: 'satellite'
+    static_configs:
+      - targets: ['satellite:8080'] # Use the port your Go app exposes metrics on
+
+  - job_name: 'processor'
+    static_configs:
+      - targets: ['processor:8000'] # Use the port your Python app exposes metrics on

@@ -13,6 +13,8 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/segmentio/kafka-go"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+    	"net/http"
 )
 
 // Config
@@ -39,6 +41,11 @@ type Event struct {
 }
 
 func main() {
+	// Start Prometheus metrics server on port 8080
+    	go func() {
+       	 	http.Handle("/metrics", promhttp.Handler())
+        	http.ListenAndServe(":8080", nil)
+    	}()
 	// 1. MinIO Connection
 	minioClient, err := minio.New(minioEndpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(minioAccessID, minioSecretKey, ""),
