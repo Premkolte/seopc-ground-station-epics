@@ -2,6 +2,18 @@
 
 > **A fully containerized, event-driven satellite intelligence system** that ingests raw satellite imagery, geo-localizes it using a Vision Transformer model, and streams live telemetry to a terminal dashboard and real-time GUI viewer.
 
+## Documentation Website
+
+Live link: https://seopc-argus.vercel.app/
+
+The Project Argus documentation website provides a clean, guided walkthrough of the platform for both new users and contributors.
+
+What you can explore there:
+- End-to-end system overview and architecture explanation
+- Setup and run instructions for local development
+- Service-by-service breakdown of the pipeline components
+- Visual project context for demos, presentation, and onboarding
+
 ---
 
 ## Architecture
