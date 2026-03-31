@@ -86,7 +86,7 @@ flowchart TD
 
 ```bash
 git clone https://github.com/parthbhanti22/seopc-ground-station-epics.git
-cd seopc-project
+cd seopc-ground-station-epics
 chmod +x launch.sh feed.sh
 ./launch.sh
 ```
