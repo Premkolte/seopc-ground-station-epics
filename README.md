@@ -85,7 +85,7 @@ flowchart TD
 ### One-Command Launch
 
 ```bash
-git clone https://github.com/your-username/seopc-project.git
+git clone https://github.com/parthbhanti22/seopc-ground-station-epics.git
 cd seopc-project
 chmod +x launch.sh feed.sh
 ./launch.sh
