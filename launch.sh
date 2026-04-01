@@ -16,18 +16,18 @@ fi
 
 # ── PHASE 1: Infrastructure ─────────────────────────────────────────────────
 echo "[ARGUS] Starting infrastructure (redpanda, minio, postgis, prometheus, grafana)..."
-sudo docker compose -f "$PROJECT_DIR/docker-compose.yml" up -d $REBUILD \
+docker compose -f "$PROJECT_DIR/docker-compose.yml" up -d $REBUILD \
     redpanda minio postgis prometheus grafana
 
 echo "[ARGUS] Waiting for PostGIS to be ready..."
-until sudo docker exec postgis pg_isready -U admin -d seopc_metadata -q 2>/dev/null; do
+until docker exec postgis pg_isready -U admin -d seopc_metadata -q 2>/dev/null; do
     sleep 1
 done
 echo "[ARGUS] PostGIS ready."
 
 # ── PHASE 2: Application containers ─────────────────────────────────────────
 echo "[ARGUS] Starting satellite and processor..."
-sudo docker compose -f "$PROJECT_DIR/docker-compose.yml" up -d $REBUILD \
+docker compose -f "$PROJECT_DIR/docker-compose.yml" up -d $REBUILD \
     satellite processor
 echo "[ARGUS] All containers up."
 
@@ -57,7 +57,7 @@ tmux split-window -v -t "$SESSION:0.1" -p 35
 
 # Pane 0 — Docker logs (immediate, read-only)
 tmux send-keys -t "$SESSION:0.0" \
-    "sudo docker compose -f $PROJECT_DIR/docker-compose.yml logs -f processor satellite" Enter
+    "docker compose -f $PROJECT_DIR/docker-compose.yml logs -f processor satellite" Enter
 
 # Pane 2 — GUI (starts after 5s; graphical window opens separately, logs silenced)
 tmux send-keys -t "$SESSION:0.2" \

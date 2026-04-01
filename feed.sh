@@ -22,7 +22,10 @@ echo "  Press Ctrl+C to stop."
 echo "=========================================="
 
 # Collect all tile files, sorted
-mapfile -t TILES < <(find "$TILES_DIR" -maxdepth 1 -name "*.jpg" | sort)
+TILES=()
+while IFS= read -r line; do
+    [[ -n "$line" ]] && TILES+=("$line")
+done < <(find "$TILES_DIR" -maxdepth 1 -name "*.jpg" | sort)
 TOTAL="${#TILES[@]}"
 
 if [[ "$TOTAL" -eq 0 ]]; then
@@ -42,14 +45,14 @@ while true; do
 
     # Use docker cp into the container's filesystem directly.
     # Plain cp to a Docker volume does NOT trigger inotify inside the container on WSL2.
-    CONTAINER=$(sudo docker ps --filter "name=satellite" --format "{{.Names}}" | head -1)
+    CONTAINER=$(docker ps --filter "name=satellite" --format "{{.Names}}" | head -1)
     if [[ -z "$CONTAINER" ]]; then
         echo "[FEEDER] WARNING: satellite container not found. Falling back to cp."
         rm -f "$BUFFER_DIR/$FILENAME"
         sleep 0.1
         cp "$TILE" "$BUFFER_DIR/$FILENAME"
     else
-        sudo docker cp "$TILE" "$CONTAINER:/downlink_buffer/$FILENAME"
+        docker cp "$TILE" "$CONTAINER:/downlink_buffer/$FILENAME"
     fi
 
     INDEX=$(( (INDEX + 1) % TOTAL ))
