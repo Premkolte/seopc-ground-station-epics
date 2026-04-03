@@ -220,7 +220,12 @@ def main():
 
             print("Prediction:", result)
 
+            # ===== OVERLAY PREDICTION =====
+            # Upscale to a fixed 800x600 resolution before drawing text. 
+            # This prevents pixelated, gigantic text on small 224x224 Sentinel tiles!
+            img = cv2.resize(img, (800, 600), interpolation=cv2.INTER_CUBIC)
             h, w, _ = img.shape
+            
             text = f"LAT: {pred_lat:.6f}  LON: {pred_lon:.6f}"
             
             # Move text to the bottom left to avoid overlapping GUI elements at top-left

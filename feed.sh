@@ -25,7 +25,7 @@ echo "=========================================="
 TILES=()
 while IFS= read -r line; do
     [[ -n "$line" ]] && TILES+=("$line")
-done < <(find "$TILES_DIR" -maxdepth 1 -name "*.jpg" | sort)
+done < <(find "$TILES_DIR" -maxdepth 1 \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | sort)
 TOTAL="${#TILES[@]}"
 
 if [[ "$TOTAL" -eq 0 ]]; then
